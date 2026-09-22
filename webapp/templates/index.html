@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>A/B Demo Shop</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 640px; margin: 80px auto; text-align: center; }
+    h1 { font-size: 28px; }
+    button {
+      background: {{ button_color }};
+      color: #fff;
+      border: none;
+      padding: 16px 32px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .badge {
+      display: inline-block;
+      background: #eee;
+      color: #333;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    a { color: #666; font-size: 13px; }
+  </style>
+</head>
+<body>
+  <div class="badge">Вариант: {{ variant }}</div>
+  <h1>{{ headline }}</h1>
+  <p>Демо-товар для A/B-теста кнопки покупки.</p>
+  <button id="buy">{{ button_text }}</button>
+  <p id="msg"></p>
+  <p><a href="/stats">Посмотреть статистику A/B-теста</a></p>
+
+  <script>
+    document.getElementById('buy').addEventListener('click', function () {
+      fetch('/click', { method: 'POST' })
+        .then(r => r.json())
+        .then(data => {
+          document.getElementById('msg').textContent = 'Клик засчитан для варианта ' + data.variant;
+        });
+    });
+  </script>
+</body>
+</html>

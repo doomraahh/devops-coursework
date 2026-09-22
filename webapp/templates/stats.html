@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>A/B статистика</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 640px; margin: 60px auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background: #f5f5f5; }
+    .winner { background: #dcfce7; font-weight: bold; }
+    form { margin-top: 20px; }
+    a { color: #2563eb; }
+  </style>
+</head>
+<body>
+  <h1>Результаты A/B-теста</h1>
+  <table>
+    <tr><th>Вариант</th><th>Показы</th><th>Клики</th><th>Конверсия, %</th></tr>
+    {% set best = report.values() | map(attribute='conversion_rate') | max %}
+    {% for name, s in report.items() %}
+    <tr class="{{ 'winner' if s.conversion_rate == best and s.impressions > 0 else '' }}">
+      <td>{{ name }}</td>
+      <td>{{ s.impressions }}</td>
+      <td>{{ s.clicks }}</td>
+      <td>{{ s.conversion_rate }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <p><a href="/">&larr; Вернуться на страницу теста</a></p>
+  <form method="post" action="/reset" onsubmit="return confirm('Сбросить всю статистику?');">
+    <button type="submit">Сбросить статистику</button>
+  </form>
+</body>
+</html>

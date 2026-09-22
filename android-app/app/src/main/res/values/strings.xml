@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AB Demo</string>
+    <string name="variant_label">Вариант: %1$s</string>
+    <string name="click_count">Кликов: %1$d</string>
+</resources>

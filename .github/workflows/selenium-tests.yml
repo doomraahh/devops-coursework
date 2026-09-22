@@ -1,0 +1,31 @@
+name: Selenium tests (python.org)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "selenium-tests/**"
+      - ".github/workflows/selenium-tests.yml"
+  pull_request:
+    paths:
+      - "selenium-tests/**"
+  schedule:
+    - cron: "0 6 * * 1" # каждый понедельник в 06:00 UTC
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: selenium-tests
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install -r requirements.txt
+
+      - name: Run Selenium tests against python.org
+        run: pytest -v

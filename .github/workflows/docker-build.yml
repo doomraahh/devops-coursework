@@ -1,0 +1,47 @@
+name: Docker Build & Smoke Test
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "webapp/**"
+      - "nginx/**"
+      - "docker-compose.yml"
+      - ".github/workflows/docker-build.yml"
+  pull_request:
+    paths:
+      - "webapp/**"
+      - "nginx/**"
+      - "docker-compose.yml"
+
+jobs:
+  build-and-smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build and start stack
+        run: docker compose up -d --build
+
+      - name: Wait for app to become healthy
+        run: |
+          for i in $(seq 1 20); do
+            if curl -sf http://localhost/health; then
+              echo "App is up"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "App did not become healthy in time"
+          docker compose logs
+          exit 1
+
+      - name: Smoke test A/B endpoints
+        run: |
+          curl -sf -c cj.txt http://localhost/ > /dev/null
+          curl -sf -b cj.txt -X POST http://localhost/click > /dev/null
+          curl -sf "http://localhost/stats?format=json"
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

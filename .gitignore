@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Desktop build artifacts
+desktop-app/build/
+desktop-app/dist/
+desktop-app/*.spec
+
+# Web app runtime data
+webapp/data/*.json
+
+# Android
+android-app/**/build/
+android-app/.gradle/
+android-app/local.properties
+android-app/.idea/
+android-app/*.iml
+android-app/app/*.iml
+
+# OS
+.DS_Store

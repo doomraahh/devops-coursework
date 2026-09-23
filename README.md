@@ -56,8 +56,7 @@ pytest -v
 ```
 
 5 тестов проверяют: главную страницу, поиск по сайту, переход в
-Downloads, переход в Documentation, блок последних новостей. Требуется
-установленный Google Chrome (уже установлен на этом сервере).
+Downloads, переход в Documentation, блок последних новостей. 
 
 ## 3. Android-приложение + CI/CD
 
@@ -75,9 +74,7 @@ CI/CD (`.github/workflows/android-ci.yml`) при каждом пуше в ве�
 - собирает debug APK и прикладывает его как build-артефакт GitHub
   Actions.
 
-Сборка происходит в облаке (GitHub Actions), поэтому Android Studio /
-Android SDK на самом сервере не нужны — только для локальной разработки
-на твоём компьютере.
+Сборка происходит в облаке (GitHub Actions).
 
 ## 4. Desktop-приложение + CI/CD
 
@@ -96,31 +93,5 @@ CI/CD (`.github/workflows/desktop-ci.yml`):
 - собирает готовые исполняемые файлы под Linux и Windows через
   PyInstaller и прикладывает их как build-артефакты.
 
-## 5. Как опубликовать репозиторий на GitHub (для запуска CI/CD)
 
-Пайплайны в `.github/workflows/` запускаются только на GitHub, поэтому
-финальный шаг — запушить репозиторий в свой GitHub-аккаунт:
 
-```bash
-# один раз авторизоваться (введите свои данные, это должен делать ты сам):
-gh auth login
-
-# создать репозиторий и запушить код:
-gh repo create devops-coursework --public --source=. --remote=origin --push
-```
-
-После пуша во вкладке **Actions** на GitHub будут видны все 4
-пайплайна (`Docker Build & Smoke Test`, `Selenium tests`,
-`Android CI/CD`, `Desktop CI/CD`) — это и есть демонстрация CI/CD для
-преподавателя.
-
-## Что показать преподавателю
-
-1. `docker compose up -d --build` на сервере — работающий веб-сервис в
-   Docker.
-2. `webapp/simulate_traffic.py` + страница `/stats` — результат A/B-теста.
-3. `pytest -v` в `selenium-tests/` — зелёные тесты python.org.
-4. Вкладка **Actions** в GitHub-репозитории — все 4 пайплайна прошли
-   успешно (зелёные галочки).
-5. Открыть `android-app/` в Android Studio, `desktop-app/app.py` —
-   показать код и структуру проектов.
